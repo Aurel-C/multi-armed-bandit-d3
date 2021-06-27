@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>K-Armed Bandit</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">  
+    <link rel="stylesheet" href="style.css">
+    <script src="d3.min.js"></script>
+  </head>
+  <body>
+    <h1>K-Armed Bandit</h1>
+    <div id="container">
+      <div>
+        <svg id="paths"></svg>
+        <br>
+        <div id="buttons">
+          <button onclick="reset()">Reset</button>
+          <div>
+            <label>Number of steps:</label>
+            <input id="steps"  type="number"></button>
+            <button onclick="n_steps(steps.value)">Run steps</button>
+          </div>
+          <button onclick="step()">Next Step</button>
+        </div>
+      </div>
+      <div id="means"></div>
+      <svg id="record"></svg>
+    </div>
+    <script src="bandit.js"></script>
+    <script src="d3.js"></script>
+  </body>
+</html>

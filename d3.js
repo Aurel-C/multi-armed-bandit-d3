@@ -89,8 +89,6 @@ function drawRecord() {
   // Add the line
   svg2.append("path")
     .datum(record)
-    .transition()
-    .duration(500)
     .attr("class", "line")
     .attr("fill", "none")
     .attr("stroke", "steelblue")

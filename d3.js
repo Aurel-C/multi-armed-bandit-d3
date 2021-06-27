@@ -18,17 +18,61 @@ var svg2 = d3.select("#record")
   .attr("transform",
     "translate(" + margin.left + "," + margin.top + ")");
 
-// adds the circle to the node
-/*node.append("circle")
-  .attr("r", d => d.data.value)*/
+// Add X axis
+var x = d3.scaleLinear().range([0, width]);
+var xAxis = d3.axisBottom().scale(x);
+svg2.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .attr("class", "myXaxis")
+
+// Add Y axis
+var y = d3.scaleLinear().range([height, 0]);
+var yAxis = d3.axisLeft().scale(y);
+svg2.append("g")
+  .attr("class", "myYaxis")
 
 draw();
 
 function draw() {
 
   drawTree();
-  drawRecord();
+  drawPlot();
 
+}
+
+function drawPlot() {
+  // Create the X axis:
+  x.domain([0, d3.max(record, function (d) { return d.index })]);
+  svg2.selectAll(".myXaxis")
+    .transition()
+    .duration(500)
+    .call(xAxis);
+
+  // create the Y axis
+  y.domain([d3.min(record, function (d) { return d.value }), d3.max(record, function (d) { return d.value })]);
+  svg2.selectAll(".myYaxis")
+    .transition()
+    .duration(500)
+    .call(yAxis);
+
+  // Create a update selection: bind to the new data
+  var u = svg2.selectAll(".lineTest")
+    .data([record], function (d) { return d.index });
+
+  // Updata the line
+  u
+    .enter()
+    .append("path")
+    .attr("class", "lineTest")
+    .merge(u)
+    .transition()
+    .duration(500)
+    .attr("d", d3.line()
+      .x(function (d) { return x(d.index); })
+      .y(function (d) { return y(d.value); }))
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 2.5)
 }
 
 function drawTree() {
@@ -51,8 +95,8 @@ function drawTree() {
         + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
         + " " + d.parent.y + "," + d.parent.x;
     })
-    .attr("stroke-width", d => Math.log(1+Math.abs(d.data.tries)))
-    .attr("stroke", d => d3.interpolateRdBu((Math.tanh(d.data.value)+1)/2) );
+    .attr("stroke-width", d => Math.log(1 + Math.abs(d.data.tries)))
+    .attr("stroke", d => d3.interpolateRdBu((Math.tanh(d.data.value) + 1) / 2));
 
   // adds each node as a group
   const node = g.selectAll(".node")
@@ -67,34 +111,4 @@ function drawTree() {
     .text(d => d.data.value.toFixed(2));
 
   g.selectAll(".root").remove("text");
-}
-
-function drawRecord() {
-  svg2.selectAll("path").remove();
-  svg2.selectAll("g").remove();
-  var x = d3.scaleLinear()
-    .domain(d3.extent(record, function (d) { return d.index; }))
-    .range([0, width]);
-  svg2.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-
-  // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([d3.min(record, function (d) { return d.value; }), d3.max(record, function (d) { return d.value; })])
-    .range([height, 0]);
-  svg2.append("g")
-    .call(d3.axisLeft(y));
-
-  // Add the line
-  svg2.append("path")
-    .datum(record)
-    .attr("class", "line")
-    .attr("fill", "none")
-    .attr("stroke", "steelblue")
-    .attr("stroke-width", 1.5)
-    .attr("d", d3.line()
-      .x(function (d) { return x(d.index) })
-      .y(function (d) { return y(d.value) })
-    )
 }

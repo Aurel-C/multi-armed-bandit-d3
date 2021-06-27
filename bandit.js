@@ -27,7 +27,7 @@ treeData.children.forEach(path => {
 means();
 
 let record = [];
-let idx = 2;
+let idx = 0;
 
 function bandit() {
     let e = 0.1;
@@ -46,14 +46,13 @@ function bandit() {
         }
     }
 
-    if (Math.random() > e) {
+    if (Math.random() > e || maxi.length===10) {
         var path = maxi[Math.floor(Math.random() * maxi.length)];
         var ismax = true;
     } else {
         var path = less[Math.floor(Math.random() * less.length)];
         var ismax = false;
     }
-
     treeData.children[path].value += (normal(treeData.children[path].mean)-treeData.children[path].value)/treeData.children[path].tries;
     if(ismax) {record.push({"index":idx,"value":treeData.children[path].value})} ;
     treeData.children[path].tries++;

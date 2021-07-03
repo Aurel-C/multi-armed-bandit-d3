@@ -43,8 +43,7 @@ function drawScatter() {
         .transition()
         .duration(750)
         .call(yAxis);
-
-
+    
     scatter.selectAll(".dot")
         .transition()
         .duration(750)

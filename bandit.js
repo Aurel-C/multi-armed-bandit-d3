@@ -10,14 +10,14 @@ function normal(m = 0) {
 }
 
 function sigmoid(t) {
-    return 1/(1+Math.pow(Math.E, -t));
+    return 1 / (1 + Math.pow(Math.E, -t));
 }
 
 const startingv = 5;
 
 let treeData = {
     "value": 0,
-    "children": Array.from({ length: 10 }, () => ({ "value": startingv, "mean": 0,"tries":1 }))
+    "children": Array.from({ length: 10 }, () => ({ "value": startingv, "mean": 0, "tries": 1,"active":false }))
 };
 
 treeData.children.forEach(path => {
@@ -28,7 +28,9 @@ means();
 
 let record = [];
 let idx = 0;
+let path = null;
 
+const nodes = drawTree();
 draw();
 
 function bandit() {
@@ -47,24 +49,24 @@ function bandit() {
             less.push(i)
         }
     }
-    
-    if (Math.random() > e || maxi.length===10) {
-        var path = maxi[Math.floor(Math.random() * maxi.length)];
+
+    if (Math.random() > e || maxi.length === 10) {
+        path = maxi[Math.floor(Math.random() * maxi.length)];
         var ismax = 1;
     } else {
-        var path = less[Math.floor(Math.random() * less.length)];
+        path = less[Math.floor(Math.random() * less.length)];
         var ismax = -1;
     }
-    treeData.children[path].value += (normal(treeData.children[path].mean)-treeData.children[path].value)/treeData.children[path].tries;
-    record.push({"index":idx,"value":treeData.children[path].value,"max":ismax});
+    treeData.children[path].value += (normal(treeData.children[path].mean) - treeData.children[path].value) / treeData.children[path].tries;
+    record.push({ "index": idx, "value": treeData.children[path].value, "max": ismax });
     treeData.children[path].tries++;
     idx++;
+    return path
 }
 
 function draw() {
-
-  drawTree();
-  drawScatter();
+    updateTree()
+    drawScatter();
 
 }
 
@@ -80,7 +82,7 @@ function n_steps(n) {
     draw();
 }
 
-function reset(){
+function reset() {
     treeData.children.forEach(path => {
         path.value = startingv;
         path.mean = randn_bm();
@@ -89,13 +91,14 @@ function reset(){
     means()
     record = [];
     idx = 0;
+    path = null;
     draw();
 }
 
-function means(){
+function means() {
     m = "<table>";
-    treeData.children.forEach(path=>{
-        m += "<tr><td style='background:"+ d3.interpolateRdBu((Math.tanh(path.mean)+1)/2) +"'>"+ path.mean.toFixed(2) +"</td></tr>";
+    treeData.children.forEach(path => {
+        m += "<tr><td style='background:" + d3.interpolateRdBu((Math.tanh(path.mean) + 1) / 2) + "'>" + path.mean.toFixed(2) + "</td></tr>";
     })
     m += "</table>"
     document.getElementById("means").innerHTML = m;

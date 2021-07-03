@@ -50,15 +50,13 @@ function bandit() {
     
     if (Math.random() > e || maxi.length===10) {
         var path = maxi[Math.floor(Math.random() * maxi.length)];
-        var ismax = true;
+        var ismax = 1;
     } else {
         var path = less[Math.floor(Math.random() * less.length)];
-        var ismax = false;
+        var ismax = -1;
     }
     treeData.children[path].value += (normal(treeData.children[path].mean)-treeData.children[path].value)/treeData.children[path].tries;
-    if(ismax) { 
-        record = record.concat([{"index":idx,"value":treeData.children[path].value}]);
-    } ;
+    record.push({"index":idx,"value":treeData.children[path].value,"max":ismax});
     treeData.children[path].tries++;
     idx++;
 }
@@ -66,7 +64,7 @@ function bandit() {
 function draw() {
 
   drawTree();
-  drawPlot();
+  drawScatter();
 
 }
 

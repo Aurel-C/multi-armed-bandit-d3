@@ -1,6 +1,6 @@
-var margin = { top: 20, right: 90, bottom: 30, left: 90 },
+var margin = { top: 0, right: 60, bottom: 0, left: 0 },
     width = 700 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 460 - margin.top - margin.bottom;
 
 const treemap = d3.tree().size([height, width]);
 
@@ -8,8 +8,8 @@ const treeChart = d3.select("#paths")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom),
     g = treeChart.append("g")
-    treeChart.append("circle").attr("r", 10).attr("transform", "translate(" + [11, 225] + ")").style("fill", "white").attr("stroke", "black").style("stroke-width", 2)
-const circle = treeChart.append("circle").attr("r", 10).attr("transform", "translate(" + [11, 225] + ")").style("fill", "white").attr("stroke", "black").style("stroke-width", 2)
+    treeChart.append("circle").attr("r", 10).attr("transform", "translate(" + [11, 230] + ")").style("fill", "white").attr("stroke", "black").style("stroke-width", 2)
+const circle = treeChart.append("circle").attr("r", 10).attr("transform", "translate(" + [11, 230] + ")").style("fill", "white").attr("stroke", "black").style("stroke-width", 2)
 
 function drawTree() {
 

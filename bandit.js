@@ -96,7 +96,7 @@ function reset() {
 }
 
 function means() {
-    m = "<table>";
+    m = "<table style=' margin-left: auto;margin-right: auto;'>";
     treeData.children.forEach(path => {
         m += "<tr><td style='background:" + d3.interpolateRdBu((Math.tanh(path.mean) + 1) / 2) + "'>" + path.mean.toFixed(2) + "</td></tr>";
     })
